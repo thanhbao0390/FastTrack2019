@@ -1,0 +1,269 @@
+////productReducer
+import {
+    FETCH_PRODUCTS_BEGIN,
+    FETCH_PRODUCTS_SUCCESS,
+    FETCH_PRODUCTS_FAILURE
+  } from '../productActions';
+  
+  const initialState = {
+    items: [],
+    loading: false,
+    error: null
+  };
+  
+  export default function productReducer(state = initialState, action) {
+    switch(action.type) {
+      case FETCH_PRODUCTS_BEGIN:
+        // Mark the state as "loading" so we can show a spinner or something
+        // Also, reset any errors. We're starting fresh.
+        return {
+          ...state,
+          loading: true,
+          error: null
+        };
+  
+      case FETCH_PRODUCTS_SUCCESS:
+        // All done: set loading "false".
+        // Also, replace the items with the ones from the server
+        return {
+          ...state,
+          loading: false,
+          items: action.payload.products
+        };
+  
+      case FETCH_PRODUCTS_FAILURE:
+        // The request failed. It's done. So set loading to "false".
+        // Save the error, so we can display it somewhere.
+        // Since it failed, we don't have items to display anymore, so set `items` empty.
+        //
+        // This is all up to you and your app though:
+        // maybe you want to keep the items around!
+        // Do whatever seems right for your use case.
+        return {
+          ...state,
+          loading: false,
+          error: action.payload.error,
+          items: []
+        };
+  
+      default:
+        // ALWAYS have a default case in a reducer
+        return state;
+    }
+  }
+  
+  // productActions
+  import axios from 'axios';
+
+
+export const FETCH_PRODUCTS_BEGIN = 'FETCH_PRODUCTS_BEGIN';
+export const FETCH_PRODUCTS_SUCCESS = 'FETCH_PRODUCTS_SUCCESS';
+export const FETCH_PRODUCTS_FAILURE = 'FETCH_PRODUCTS_FAILURE';
+
+export const fetchProductsBegin = () => ({
+    type: FETCH_PRODUCTS_BEGIN
+});
+
+export const fetchProductsSuccess = products => ({
+    type: FETCH_PRODUCTS_SUCCESS,
+    payload: { products }
+});
+
+export const fetchProductsFailure = error => ({
+    type: FETCH_PRODUCTS_FAILURE,
+    payload: { error }
+});
+
+export function fetchProducts() {
+    return dispatch => {
+        dispatch(fetchProductsBegin());
+        // return fetch("http://localhost:3001/api/test", {
+        //     method: 'GET',
+        //     mode: 'no-cors',
+        //     headers: {
+        //         Accept: 'application/json',
+        //         'Content-Type': 'application/json',
+        //     },
+        //     // body: JSON.stringify({
+        //     //     firstParam: 'yourValue',
+        //     //     secondParam: 'yourOtherValue',
+        //     // }),
+        // }).then(handleErrors)
+        // .then(response => response.json() )
+        // .then(function(response) {
+        //     console.log(response.text());
+        //     return response.text();
+        // })
+        //     // .then(handleErrors)
+        //     // .then(response => response.json())
+        //     // .then(json => {
+        //     //     dispatch(fetchProductsSuccess(json.products));
+        //     //     return json.products;
+        //     // })
+        // .catch(error => dispatch(fetchProductsFailure(error)));
+        axios.get("http://localhost:3001/api/test")
+            // .then(response => handleErrors(response))
+            .then(response => {
+                return dispatch(fetchProductsSuccess(response.data.items));
+                // console.log(response.data.products);
+                // return response.data.products;
+
+            })
+            .catch(error => dispatch(fetchProductsFailure(error)));
+    };
+
+
+}
+
+// Handle HTTP errors since fetch won't.
+// function handleErrors(response) {
+//     if (!response.ok) {
+//         throw Error(response.statusText);
+//     }
+//     return response;
+// }
+
+
+//// ProductList
+
+import React from "react";
+import { connect } from "react-redux";
+import { fetchProducts } from "../redux/productActions";
+
+class ProductList extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            items: [],
+            loading: false,
+            error: null,
+          };
+    }
+
+    componentDidMount() {
+        console.log('componentDidMount');
+        this.props.dispatch(fetchProducts());
+    }
+
+    componentWillMount() {
+        console.log('componentWillMount');
+    }
+
+    componentWillReceiveProps(NextProps) {
+        console.log('componentWillReceiveProps', NextProps);
+    }
+
+    componentWillUnmount() {
+        console.log('componentWillUnmount');
+    }
+
+    render() {
+        const { error, loading, products } = this.props;
+
+        if (error) {
+            return <div>Error! {error.message}</div>;
+        }
+
+        if (loading) {
+            return <div>Loading...</div>;
+        }
+
+        return (
+            <ul>
+                {products.map(product =>
+                    <li key={product.id}>{product.name}</li>
+                )}
+            </ul>
+        );
+    }
+};
+
+const mapStateToProps = state => {
+    console.log(state);
+    
+    return {
+        products: state.products.items,
+        loading: state.products.loading,
+        error: state.products.error
+    }
+};
+
+export default connect(mapStateToProps)(ProductList);
+
+
+/////////////////Other
+///TodoApp
+import React from "react";
+import AddTodo from "./components/AddTodo";
+import TodoList from "./components/TodoList";
+import VisibilityFilters from "./components/VisibilityFilters";
+import ProductList from "./components/ProductList";
+import "./assets/styles.css";
+
+export default function TodoApp() {
+  return (
+    <div className="todo-app">
+      <h1>Todo List</h1>
+      <AddTodo />
+      <TodoList />
+      <VisibilityFilters />
+      <ProductList />
+    </div>
+  );
+}
+
+///package
+
+{
+  "name": "expresstest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "pg": "^7.11.0"
+  }
+}
+
+//// const express     = require('express');
+const { Client }  = require('pg');
+const bodyParser  = require('body-parser');
+const app         = express();
+const cors = require("cors");
+
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.post('/api/select', function(req, res) {
+// console.log(req);
+console.log(req.body);
+res.send(req.body);
+}); 
+
+// create application/json parser
+var jsonParser = bodyParser.json()
+
+// // Ajax screen RCAU02JS01
+app.get('/api/test',jsonParser,  function (req, res) {
+    res.status(200).sendFile(__dirname + '/api/test.json')
+});
+
+app.listen(3001, () => {
+ console.log('listening on port 3001');
+});
+
+
+
+
+
+  
+  
