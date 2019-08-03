@@ -214,4 +214,29 @@
 		<servlet-name>GiaiNenServlet</servlet-name>
 		<url-pattern>/giainen</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>SoDoAddServlet</servlet-name>
+		<servlet-class>ft.edu.vn.cafes.servlet.SoDoAddServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SoDoAddServlet</servlet-name>
+		<url-pattern>/sodo/add</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>SoDoEditServlet</servlet-name>
+		<servlet-class>ft.edu.vn.cafes.servlet.SoDoEditServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SoDoEditServlet</servlet-name>
+		<url-pattern>/sodo/edit</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>SoDoDeleteServlet</servlet-name>
+		<servlet-class>ft.edu.vn.cafes.servlet.SoDoDeleteServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SoDoDeleteServlet</servlet-name>
+		<url-pattern>/sodo/delete</url-pattern>
+	</servlet-mapping>
 </web-app>

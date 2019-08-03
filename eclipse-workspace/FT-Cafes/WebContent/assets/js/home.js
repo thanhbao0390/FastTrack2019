@@ -21,9 +21,22 @@ $(".navbar-chilrd li").on("click", function (e) {
 			$("#contents").html(resp);
 		})
 		.fail(function (resp) {
-			//alert("error");
+			console.log(error);
 		});
-		// .always(function (rep) {
-		// 	alert("complete");
-		// });
 });
+
+function refresh(target, link, method, data) {
+	$.ajax({
+		method: method,
+		url: link,
+		data: data
+	})
+		.done(function (resp) {
+			$(target).html(resp);
+		})
+		.fail(function (error) {
+			console.log(error);
+		});
+}
+
+window.refresh = refresh;
