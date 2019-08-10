@@ -13,26 +13,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import spring.ft.edu.vn.core.entity.User;
-import spring.ft.edu.vn.core.repository.UserRepository;
+import spring.ft.edu.vn.core.entity.Dongct;
+import spring.ft.edu.vn.core.repository.DongctRepository;
 
 @RestController
-@RequestMapping(path = "/user")
-public class UserController {
+@RequestMapping(path = "/dongct")
+public class DongctController {
 
 	@Autowired
-	private UserRepository repo;
+	private DongctRepository repo;
 
 	@GetMapping
-	public @ResponseBody Iterable<User> findAll() {
+	public @ResponseBody Iterable<Dongct> findAll() {
 
 		return repo.findAll();
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<User> findById(@PathVariable Integer id) {
+	public ResponseEntity<Dongct> findById(@PathVariable Integer id) {
 
-		Optional<User> o = repo.findById(id);
+		Optional<Dongct> o = repo.findById(id);
 		if (!o.isPresent()) {
 			// log.error("Id " + id + " is not existed");
 			return ResponseEntity.badRequest().build();
@@ -42,13 +42,13 @@ public class UserController {
 	}
 	
 	@PostMapping
-	public @ResponseBody void save(@RequestBody User p) {
+	public @ResponseBody void save(@RequestBody Dongct p) {
 
 		repo.save(p);
 	}
 	
 	@DeleteMapping
-	public @ResponseBody void delete(@RequestBody User p) {
+	public @ResponseBody void delete(@RequestBody Dongct p) {
 
 		repo.delete(p);
 	}

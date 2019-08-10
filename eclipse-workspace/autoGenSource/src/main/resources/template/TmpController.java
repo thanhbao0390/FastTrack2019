@@ -1,4 +1,4 @@
-package spring.ft.edu.vn.core.controller;
+package s-build:packageName;
 
 import java.util.Optional;
 
@@ -13,26 +13,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import spring.ft.edu.vn.core.entity.User;
-import spring.ft.edu.vn.core.repository.UserRepository;
+import s-build:packageEntityName;
+import s-build:packageRepositoryName;
 
 @RestController
-@RequestMapping(path = "/user")
-public class UserController {
+@RequestMapping(path = "/s-build:requestUrl")
+public class s-build:className {
 
 	@Autowired
-	private UserRepository repo;
+	private s-build:classRepositoryName repo;
 
 	@GetMapping
-	public @ResponseBody Iterable<User> findAll() {
+	public @ResponseBody Iterable<s-build:classEntityName> findAll() {
 
 		return repo.findAll();
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<User> findById(@PathVariable Integer id) {
+	public ResponseEntity<s-build:classEntityName> findById(@PathVariable s-build:propertiesType id) {
 
-		Optional<User> o = repo.findById(id);
+		Optional<s-build:classEntityName> o = repo.findById(id);
 		if (!o.isPresent()) {
 			// log.error("Id " + id + " is not existed");
 			return ResponseEntity.badRequest().build();
@@ -42,13 +42,13 @@ public class UserController {
 	}
 	
 	@PostMapping
-	public @ResponseBody void save(@RequestBody User p) {
+	public @ResponseBody void save(@RequestBody s-build:classEntityName p) {
 
 		repo.save(p);
 	}
 	
 	@DeleteMapping
-	public @ResponseBody void delete(@RequestBody User p) {
+	public @ResponseBody void delete(@RequestBody s-build:classEntityName p) {
 
 		repo.delete(p);
 	}

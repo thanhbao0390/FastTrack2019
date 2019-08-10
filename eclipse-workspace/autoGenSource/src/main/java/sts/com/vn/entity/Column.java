@@ -1,5 +1,7 @@
 package sts.com.vn.entity;
 
+import sts.com.vn.util.ConvertUtil;
+
 public class Column {
 
 	public String TABLE_CATALOG;
@@ -147,6 +149,22 @@ public class Column {
 		return COLUMN_TYPE;
 	}
 
+	public String getType() {
+		return ConvertUtil.getType(COLUMN_TYPE);
+	}
+
+	public String getPropertiesName() {
+		return ConvertUtil.convertPropertiesName(COLUMN_NAME);
+	}
+
+	public String getSetMethodName() {
+		return ConvertUtil.convertSetMethod(COLUMN_NAME);
+	}
+
+	public String getGetMethodName() {
+		return ConvertUtil.convertGetMethod(COLUMN_NAME);
+	}
+
 	public void setCOLUMN_TYPE(String cOLUMN_TYPE) {
 		COLUMN_TYPE = cOLUMN_TYPE;
 	}
@@ -157,6 +175,12 @@ public class Column {
 
 	public void setCOLUMN_KEY(String cOLUMN_KEY) {
 		COLUMN_KEY = cOLUMN_KEY;
+	}
+
+	public boolean isKey() {
+		if (COLUMN_KEY.contains("PRI"))
+			return true;
+		return false;
 	}
 
 	public String getEXTRA() {

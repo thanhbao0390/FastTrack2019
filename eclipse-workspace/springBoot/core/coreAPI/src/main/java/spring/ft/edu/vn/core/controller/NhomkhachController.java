@@ -13,26 +13,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import spring.ft.edu.vn.core.entity.User;
-import spring.ft.edu.vn.core.repository.UserRepository;
+import spring.ft.edu.vn.core.entity.Nhomkhach;
+import spring.ft.edu.vn.core.repository.NhomkhachRepository;
 
 @RestController
-@RequestMapping(path = "/user")
-public class UserController {
+@RequestMapping(path = "/nhomkhach")
+public class NhomkhachController {
 
 	@Autowired
-	private UserRepository repo;
+	private NhomkhachRepository repo;
 
 	@GetMapping
-	public @ResponseBody Iterable<User> findAll() {
+	public @ResponseBody Iterable<Nhomkhach> findAll() {
 
 		return repo.findAll();
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<User> findById(@PathVariable Integer id) {
+	public ResponseEntity<Nhomkhach> findById(@PathVariable String id) {
 
-		Optional<User> o = repo.findById(id);
+		Optional<Nhomkhach> o = repo.findById(id);
 		if (!o.isPresent()) {
 			// log.error("Id " + id + " is not existed");
 			return ResponseEntity.badRequest().build();
@@ -42,13 +42,13 @@ public class UserController {
 	}
 	
 	@PostMapping
-	public @ResponseBody void save(@RequestBody User p) {
+	public @ResponseBody void save(@RequestBody Nhomkhach p) {
 
 		repo.save(p);
 	}
 	
 	@DeleteMapping
-	public @ResponseBody void delete(@RequestBody User p) {
+	public @ResponseBody void delete(@RequestBody Nhomkhach p) {
 
 		repo.delete(p);
 	}

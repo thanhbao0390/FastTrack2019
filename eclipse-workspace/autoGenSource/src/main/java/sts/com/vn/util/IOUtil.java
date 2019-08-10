@@ -6,19 +6,22 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class IOUtil {
 
-	public static StringBuffer readFile(String path) {
+	public static List<String> readFile(String path) {
 		BufferedReader reader;
-		StringBuffer contents = new StringBuffer();
+		// StringBuffer contents = new StringBuffer();
+		List<String> contents = new ArrayList<String>();
 		try {
 			reader = new BufferedReader(new FileReader(path));
 			String line = reader.readLine();
 			while (line != null) {
 				// System.out.println(line);
 				// read next line
-				contents.append(line).append(System.lineSeparator());
+				contents.add(line + System.lineSeparator());
 				line = reader.readLine();
 			}
 			reader.close();
